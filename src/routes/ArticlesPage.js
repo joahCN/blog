@@ -4,12 +4,14 @@ import { Route } from 'dva/router';
 import ArticleEdit from './ArticleEditPage';
 import ArticlesList from './ArticlesListPage';
 
-function ArticlesPage() {
+function ArticlesPage({match}) {
   return (
     <div>
-      <Route path="/articles" exact component={ArticlesList} />
-      <Route path="/articles/add" component={ArticleEdit} />
-      <Route path="/articles/edit" component={ArticleEdit} />
+      <Route path={`${match.url}/`} exact component={ArticlesList} />
+      <Route path={`${match.url}/add`} render={(props)=>{
+        return <ArticleEdit {...props} listPage = {match.url}/>
+      }} />
+      <Route path={`${match.url}/edit`} component={ArticleEdit} />
     </div>
   );
 }

@@ -30,6 +30,13 @@ export default {
       }
       // yield put({ type: 'updateArticleList', data: action.data });
     },
+    *deleteArticle(action, {call, put}) {
+      const id = action.id;
+      let result = yield call(request.article.deleteArticle, [{id}]);
+      if(result.data.success) {
+        yield put({ type: 'updateList', deleted: [id] });
+      }
+    }
   },
 
   reducers: {
@@ -43,6 +50,13 @@ export default {
       const editId = action.id;
       return update(state, { editId: { $set: editId } });
     },
+    updateList(state, action) {
+      const deleted = action.deleted;
+      const availableList = state.list.filter((article)=>{
+        return !~deleted.indexOf(article.id)
+      });
+      return update(state, { list: { $set: availableList}});
+    }
   },
 
 };

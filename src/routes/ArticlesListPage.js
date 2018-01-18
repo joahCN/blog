@@ -4,12 +4,12 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Block } from '../components/index';
 
-function getColumns(onEdit) {
+function getColumns(onEdit, onDelete) {
   return [{
     title: 'Name',
     dataIndex: 'title',
     key: 'title',
-    render: text => <Link to="/">{text}</Link>,
+    render: text => <span>{text}</span>,
   }, {
     title: 'Action',
     key: 'action',
@@ -17,7 +17,7 @@ function getColumns(onEdit) {
       <span>
         <a href="javascript:;" onClick={() => onEdit(record.id)}>Edit</a>
         <span className="ant-divider" />
-        <a href="javascript:;" >Delete</a>
+        <a href="javascript:;" onClick = {() => onDelete(record.id)}>Delete</a>
       </span>
     ),
   }];
@@ -29,11 +29,14 @@ class ArticlesListPage extends React.Component {
   }
   addArticle = () => {
     this.props.dispatch({ type: 'articles/editArticle', id: '' });
-    this.props.history.push('/articles/add');
+    this.props.history.push(`${this.props.match.url}/add`);
   };
   onEdit = (articleId) => {
     this.props.dispatch({ type: 'articles/editArticle', id: articleId });
-    this.props.history.push('/articles/add');
+    this.props.history.push(`${this.props.match.url}/add`);
+  };
+  onDelete = (articleId) => {
+    this.props.dispatch({ type: 'articles/deleteArticle', id: articleId})
   };
   render() {
     return (
@@ -41,7 +44,7 @@ class ArticlesListPage extends React.Component {
         <Block>
           <Button onClick={this.addArticle} type="primary">添加文章</Button>
         </Block>
-        <Table columns={getColumns(this.onEdit)} dataSource={this.props.data} />
+        <Table columns={getColumns(this.onEdit, this.onDelete)} dataSource={this.props.data} />
       </div>
     );
   }

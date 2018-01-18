@@ -1,10 +1,26 @@
 import React from 'react';
-// import { connect } from 'dva';
+import { connect } from 'dva';
+import { Row, Col, Avatar } from 'antd';
 
-function HomePage() {
+function HomePage({user}) {
   return (
-    <div>This is my home page.</div>
+    <div>
+      <Row>
+        <Col>
+          <Avatar src={user.image}></Avatar>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={8}>{user.name}</Col>
+      </Row>
+    </div>
   );
 }
 
-export default HomePage;
+const mapStateToProps = (state)=>{
+  return {
+    user: state.user.user
+  }
+};
+
+export default connect(mapStateToProps)(HomePage);

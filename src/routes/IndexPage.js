@@ -12,8 +12,8 @@ class IndexPage extends React.Component {
 
   switchMenuItem = ({ key }) => {
     const paths = {
-      1: '/home',
-      2: '/articles',
+      1: `${this.props.match.url}/home`,
+      2: `${this.props.match.url}/articles`,
     };
     this.props.history.push(paths[key]);
   };
@@ -45,9 +45,9 @@ class IndexPage extends React.Component {
           <Header style={{ background: '#fff', padding: '0 20px' }} >我的博客</Header>
           <Content style={{ margin: '24px 16px 0' }}>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-              <Route path="/home" exact component={HomePage} />
-              <Route path="/articles" component={ArticlesPage} />
-              <Redirect to="/home" />
+              <Route path={`${this.props.match.url}/home`} exact component={HomePage} />
+              <Route path={`${this.props.match.url}/articles`} component={ArticlesPage} />
+              <Redirect to={`${this.props.match.url}/home`} />
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

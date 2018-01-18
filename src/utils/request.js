@@ -1,6 +1,7 @@
 import fetch from 'dva/fetch';
+import config from '../config';
 
-const baseURL = 'http://localhost:7001';
+const baseURL = config.serverUrl;
 
 function parseJSON(response) {
   return response.json();
@@ -23,10 +24,25 @@ function checkStatus(response) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, options) {
-  return fetch(baseURL + url, options)
+function request(url, options) {
+  return fetch(baseURL + url, {credentials: 'include', ...options})
     .then(checkStatus)
     .then(parseJSON)
     .then(data => ({ data }))
     .catch(err => ({ err }));
+}
+
+export default {
+  get: function(url) {
+    return request(url);
+  },
+  post: function(url, body) {
+    return request(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+  }
 }
